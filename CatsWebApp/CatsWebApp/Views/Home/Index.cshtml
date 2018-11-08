@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Fluffy Duffy Munchkin Cats</h1>
+<ul>
+    @foreach (var cat in Model.Cats)
+    {
+    <li> <a href="/cats/@cat.Id" >@cat.Name</a> </li>
+    }
+   
+</ul>
+<a href="/cats/add" class="btn btn-primary">Add Cat</a>

@@ -1,0 +1,11 @@
+﻿@model CatsWebApp.Data.Cat
+
+@{
+    ViewBag.Title = "Cat Page";
+    Layout = "_Layout";
+}
+
+<h2>@Model.Name</h2>
+<img src="@Model.ImageUrl" alt="Alternate Text" height="200" />
+<h4>Age: @Model.Age</h4>
+<h4>Breed: @Model.Breed</h4>
