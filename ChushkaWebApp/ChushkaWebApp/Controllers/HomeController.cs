@@ -1,43 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ChushkaWebApp.Models;
-
-namespace ChushkaWebApp.Controllers
+﻿namespace ChushkaWebApp.Controllers
 {
+    using System.Diagnostics;
+    using Microsoft.AspNetCore.Mvc;
+    using Models;
+    using Services.Contracts;
+
     public class HomeController : Controller
     {
+        private readonly IProductService productService;
+
+        public HomeController(IProductService productService)
+        {
+            this.productService = productService;
+        }
+
         public IActionResult Index()
         {
-            return View();
-        }
+            if (this.User.Identity.IsAuthenticated)
+            {
+                var model = this.productService.GetAllProducts(this.User.Identity.Name);
+                return this.View(model);
+            }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
     }
 }

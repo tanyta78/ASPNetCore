@@ -1,0 +1,14 @@
+﻿@model ChushkaWebApp.Data.Models.Order[];
+
+@for (var index = 0; index < Model.Length; index++)
+{
+    var order = Model[index];
+    var realIndex = index + 1;
+    <tr>
+        <th scope="row">@realIndex</th>
+        <td>@order.Id</td>
+        <td>@order.User.FullName</td>
+        <td>@order.Product.Name</td>
+        <td>@order.OrderedOn.ToString("d")</td>
+    </tr>
+}
