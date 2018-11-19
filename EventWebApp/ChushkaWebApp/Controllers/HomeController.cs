@@ -7,18 +7,18 @@
 
     public class HomeController : Controller
     {
-        private readonly IEventService productService;
+        private readonly IEventService eventService;
 
-        public HomeController(IEventService productService)
+        public HomeController(IEventService eventService)
         {
-            this.productService = productService;
+            this.eventService = eventService;
         }
 
         public IActionResult Index()
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                var model = this.productService.GetAllProducts(this.User.Identity.Name);
+                var model = this.eventService.GetAllEvents(this.User.Identity.Name);
                 return this.View(model);
             }
 

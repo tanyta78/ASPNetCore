@@ -12,12 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Shared\_ProductsListPartial.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
   </ItemGroup>
 

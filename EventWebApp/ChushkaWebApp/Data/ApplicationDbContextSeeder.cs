@@ -62,7 +62,8 @@
                 {
                     UserName = "Admin",
                     Email = "admin@admin.com",
-                    FullName = "Admin"
+                    FirstName = "Admin",
+                    LastName = "Adminof"
                 };
                 await userManager.CreateAsync(admin, "123456");
                 await userManager.AddToRoleAsync(admin, "Admin");
