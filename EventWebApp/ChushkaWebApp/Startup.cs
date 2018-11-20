@@ -1,7 +1,9 @@
 ﻿namespace EventWebApp
 {
+    using System;
     using Data;
     using Data.Models;
+    using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -10,6 +12,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Middlewares;
     using Services;
     using Services.Contracts;
@@ -73,26 +76,18 @@
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
-          
-
+            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IServiceProvider provider,
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext dbContext)
         {
-            //todo: add middleware
-            // Seed data on application startup
-            //using (var serviceScope = app.ApplicationServices.CreateScope())
-            //{
-            //    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-            //    if (env.IsDevelopment())
-            //    {
-            //        dbContext.Database.Migrate();
-            //    }
-
-            //    ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
-            //}
+            loggerFactory.AddContext(LogLevel.Error, dbContext);
 
             if (env.IsDevelopment())
             {
@@ -105,7 +100,7 @@
                 app.UseHsts();
             }
 
-           
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -113,6 +108,7 @@
 
             app.UseMiddleware<SeedUserRolesAndAdminMiddleware>();
             app.UseMiddleware<SeedDataMiddleware>();
+            app.UseMiddleware<RequestLoggerMiddleware>();
 
             app.UseMvc(routes =>
             {

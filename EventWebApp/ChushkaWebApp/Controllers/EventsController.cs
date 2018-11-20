@@ -1,6 +1,7 @@
 ﻿namespace EventWebApp.Controllers
 {
     using Data.Models;
+    using Filters;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Events;
@@ -31,6 +32,7 @@
             return this.View();
         }
 
+        [TypeFilter(typeof(LogActionFilter))]
         [Authorize("Admin")]
         [HttpPost]
         public IActionResult Create(EventViewModel model)

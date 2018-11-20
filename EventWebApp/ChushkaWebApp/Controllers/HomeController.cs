@@ -1,5 +1,6 @@
 ﻿namespace EventWebApp.Controllers
 {
+    using System;
     using System.Diagnostics;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -16,6 +17,7 @@
 
         public IActionResult Index()
         {
+           // throw new Exception("Try to log error exception in db");
            return this.View();
         }
 
