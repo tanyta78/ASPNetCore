@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Middlewares;
     using Services;
     using Services.Contracts;
 
@@ -79,18 +80,19 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //todo: add middleware
             // Seed data on application startup
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //using (var serviceScope = app.ApplicationServices.CreateScope())
+            //{
+            //    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (env.IsDevelopment())
-                {
-                    dbContext.Database.Migrate();
-                }
+            //    if (env.IsDevelopment())
+            //    {
+            //        dbContext.Database.Migrate();
+            //    }
 
-                ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
-            }
+            //    ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
+            //}
 
             if (env.IsDevelopment())
             {
@@ -99,15 +101,18 @@
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
+           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseAuthentication();
+
+            app.UseMiddleware<SeedUserRolesAndAdminMiddleware>();
+            app.UseMiddleware<SeedDataMiddleware>();
 
             app.UseMvc(routes =>
             {

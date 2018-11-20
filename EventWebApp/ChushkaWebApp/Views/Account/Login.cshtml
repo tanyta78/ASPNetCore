@@ -6,27 +6,29 @@
 }
 
 <h1 class="text-center">Login</h1>
-<hr class="bg-secondary w-50" />
+<hr class="chushka-bg-color w-50 hr-2" />
 <form class="mx-auto w-50" asp-controller="Account" asp-action="Login">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Username"></label>
-        <input asp-for="Username" type="text" class="form-control" placeholder="Username..." name="username">
+  <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group ">
+        <label asp-for="Username" class="justify-content-center d-flex"></label>
+        <input asp-for="Username" type="text" class="form-control justify-content-center d-flex" placeholder="Username..." name="username">
         <span asp-validation-for="Username"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" placeholder="Password..." name="password">
+    <div class="form-group ">
+        <label asp-for="Password" class=" justify-content-center d-flex"></label>
+        <input asp-for="Password" type="password" class="form-control justify-content-center d-flex" placeholder="Password..." name="password">
         <span asp-validation-for="Password"></span>
     </div>
-    <hr class="bg-secondary w-50" />
-    <input type="checkbox" value="Remember me"/>
-    <hr class="bg-secondary w-50" />
+    <hr class="chushka-bg-color  hr-2" />
+    <input type="checkbox" value="Remember me" class="justify-content-center"/> Remember me?
+    <hr class="chushka-bg-color  hr-2" />
     <div class="button-holder d-flex justify-content-center">
         <button type="submit" class="btn chushka-bg-color">Login</button>
     </div>
-    <div>
+    <div class="d-flex justify-content-center">
         <a href="#">Forgot your password?</a>
+    </div>
+    <div class="d-flex justify-content-center">
         <a href="#">Register as a new user</a>
     </div>
 </form>

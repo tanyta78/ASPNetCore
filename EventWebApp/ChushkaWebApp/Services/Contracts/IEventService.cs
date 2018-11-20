@@ -6,7 +6,7 @@
 
     public interface IEventService
     {
-        EventsListViewModel GetAllEvents(string username);
+        EventViewModel[] GetAllEvents(string username);
 
         Event GetEventById(int id);
 

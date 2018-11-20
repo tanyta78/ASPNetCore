@@ -1,0 +1,34 @@
+﻿@model EventWebApp.Models.Events.EventViewModel[]
+
+@{
+    ViewData["Title"] = "All Events";
+}
+
+<h1 class="text-center">All Events</h1>
+<hr class="chushka-bg-color w-50 hr-2" />
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Place</th>
+        </tr>
+    </thead>
+    <tbody>
+    @for (var index = 0; index < Model.Length; index++)
+    {
+        var evento = Model[index];
+        var realIndex = index + 1;
+        <tr>
+            <th>@realIndex</th>
+            <td>@evento.Name</td>
+            <td>@evento.Start</td>
+            <td>@evento.End</td>
+            <td>@evento.Place</td>
+        </tr>
+    }
+    </tbody>
+</table>
+

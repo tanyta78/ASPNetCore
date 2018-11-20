@@ -4,38 +4,50 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Events
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/Events/All">All Events</a>
-            if (User.IsInRole("Admin"))
-            {
-            <a class="dropdown-item" href="/Events/Create">Create event</a>
-            }
-           
-        </div>
-    </div>
-    
-    <form asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+<div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link nav-link-dark">Home</a>
+        </li>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle nav-link-dark" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="nav-link-dark">Events</span>
+                  
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" asp-controller="Events" asp-action="All">All Events</a>
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <a class="dropdown-item" asp-controller="Events" asp-action="Create">Create Event</a>
+                    }
+                </div>
             </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+        }
+    </ul>
+</div>
+<div class="collapse navbar-collapse navbar-left justify-content-end " id="navbarNav">
+    @if (!this.User.Identity.IsAuthenticated)
+    {
+        <ul class="navbar-nav ">
+            <li class="nav-item">
+                <a class="nav-link nav-link-dark " asp-controller="Account" asp-action="Login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-link-dark " asp-controller="Account" asp-action="Register">Register</a>
             </li>
         </ul>
-    </form>
-
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="/Account/Register" class="nav-link">Register</a></li>
-        <li><a href="/Account/Login" class="nav-link">Login</a></li>
-    </ul>
-}
+    }
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link nav-link-dark" asp-controller="Home" asp-action="Index">Hello @User.Identity.Name!</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link nav-link-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+            </li>
+        </ul>
+    }
+</div>

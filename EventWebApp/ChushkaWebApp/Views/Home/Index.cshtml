@@ -6,25 +6,26 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div class="container-fluid text-center">
+    <div class="jumbotron mt-3 text-center chushka-bg-color">
         @if (User.IsInRole("Admin"))
         {
             <h2>Greetings, administrator - @User.Identity.Name !</h2>
+            <hr class="chushka-bg-color w-50 hr-2" />
             <h4>Enjoy your work.</h4>
         }
         else
         {
             <h2>Welcome,  @User.Identity.Name !</h2>
-            <hr class="bg-secondary"/>
+            <hr class="chushka-bg-color w-50 hr-2" />
             <h4>Eventures wishes you an exiting experience.</h4>
         }
     </div>
-    <hr class="hr-2 bg-dark" />
+  
  }
 else
 {
     <div class="jumbotron mt-3 chushka-bg-color">
-        <h1>Eventures - The best ticket service in the world.</h1>
+        <h2>Eventures - The best ticket service in the world.</h2>
         <hr class="bg-dark" />
         <h3><a class="nav-link-dark" href="/Account/Login">Login</a> to start "eventing". </h3>
         <h3><a class="nav-link-dark" href="/Account/Register">Register</a> if you don't have an account.</h3>

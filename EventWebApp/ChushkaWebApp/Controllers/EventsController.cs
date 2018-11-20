@@ -3,34 +3,42 @@
     using Data.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using Models.Events;
     using Services.Contracts;
 
-    [Authorize("Admin")]
+
     public class EventsController : Controller
     {
         private readonly IEventService eventService;
-        private readonly ILogger logger;
+        // private readonly ILogger logger;
 
-        public EventsController(IEventService eventService, ILogger logger)
+        public EventsController(IEventService eventService)
         {
             this.eventService = eventService;
-            this.logger = logger;
+            // this.logger = logger;
         }
 
+        [Authorize]
+        public IActionResult All()
+        {
+            var model = this.eventService.GetAllEvents(this.User.Identity.Name);
+            return this.View(model);
+        }
+
+        [Authorize("Admin")]
         public IActionResult Create()
         {
             return this.View();
         }
 
+        [Authorize("Admin")]
         [HttpPost]
         public IActionResult Create(EventViewModel model)
         {
             return this.eventService.CreateEvent(model);
         }
 
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Details(string id)
         {
             var eventById = this.eventService.GetEventById(int.Parse(id));
@@ -42,34 +50,38 @@
             return this.View(eventById);
         }
 
+        [Authorize("Admin")]
         public IActionResult Delete(string id)
         {
             Event product = this.eventService.GetEventById(int.Parse(id));
             var viewModel = new EventViewModel
             {
-               //todo
+                //todo: add deleting functionality
             };
 
             return this.View(viewModel);
         }
 
+        [Authorize("Admin")]
         [HttpPost]
         public IActionResult Delete(EventViewModel model)
         {
             return this.eventService.DeleteEvent(model.Id.ToString());
         }
 
+        [Authorize("Admin")]
         public IActionResult Edit(string id)
         {
             var evento = this.eventService.GetEventById(int.Parse(id));
             var viewModel = new EventViewModel
             {
-               //todo edit props for changing
+                //todo: edit props for changing
             };
 
             return this.View(viewModel);
         }
 
+        [Authorize("Admin")]
         [HttpPost]
         public IActionResult Edit(EventViewModel model)
         {

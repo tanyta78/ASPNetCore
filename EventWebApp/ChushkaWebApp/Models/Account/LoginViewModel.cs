@@ -5,7 +5,7 @@
     public class LoginViewModel
     {
         [Required(ErrorMessage = "You must enter an username")]
-        [StringLength(50, ErrorMessage = "Username length must between 6 and 50 characters", MinimumLength = 6)]
+        [StringLength(50, ErrorMessage = "Username length must between 6 and 50 characters", MinimumLength = 3)]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "You must enter an password")]

@@ -13,12 +13,12 @@
     public class EventService : PageModel, IEventService
     {
         private readonly ApplicationDbContext db;
-        private readonly ILogger logger;
+     
 
-        public EventService(ApplicationDbContext db, ILogger logger)
+        public EventService(ApplicationDbContext db)
         {
             this.db = db;
-            this.logger = logger;
+          
         }
 
         public IActionResult CreateEvent(EventViewModel model)
@@ -35,7 +35,7 @@
 
             this.db.Events.Add(evento);
             this.db.SaveChanges();
-            this.logger.LogInformation("Event created:" + evento.Name,evento);
+           // this.logger.LogInformation("Event created:" + evento.Name,evento);
 
             return this.Redirect($"/events/details?id={evento.Id}");
         }
@@ -59,7 +59,7 @@
             var evento = this.db.Events.FirstOrDefault(p => p.Id == model.Id);
 
             if (evento == null) return this.Redirect("/");
-            //todo add properties for changing values
+            //todo: add properties for changing values
             evento.Name = model.Name;
             evento.Place = model.Place;
             evento.PricePerTicket = model.PricePerTicket;
@@ -71,7 +71,7 @@
             return this.Redirect("/");
         }
 
-        public EventsListViewModel GetAllEvents(string username)
+        public EventViewModel[] GetAllEvents(string username)
         {
             var events = this.db.Events
                              .Select(x =>
@@ -84,12 +84,7 @@
                                  })
                              .ToArray();
 
-            var viewModel = new EventsListViewModel()
-            {
-                Events = events,
-            };
-
-            return viewModel;
+           return events;
         }
 
         public Event GetEventById(int id)

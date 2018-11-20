@@ -5,8 +5,8 @@
 }
 
 <h1 class="text-center">Register</h1>
-<hr class="bg-secondary w-50" />
-<form asp-controller="Account" asp-action="Register" class="mx-auto half-width" method="post">
+<hr class="chushka-bg-color w-50 hr-2" />
+<form asp-controller="Account" asp-action="Register" class="mx-auto w-50" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="row">
         <div class="form-group col">
@@ -32,7 +32,7 @@
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
     </div>
-    <hr class="bg-secondary w-50" />
+   <hr class="chushka-bg-color hr-2" />
     <div class="row">
         <div class="form-group col">
             <label asp-for="FirstName" class="control-label">First Name</label>
@@ -52,7 +52,7 @@
             <span asp-validation-for="UniqueCitizenNumber" class="text-danger"></span>
         </div>
     </div>
-    <hr class="bg-secondary w-50" />
+   <hr class="chushka-bg-color hr-2" />
     <div class="button-holder d-flex justify-content-center">
         <button type="submit" class="btn chushka-bg-color">Register</button>
     </div>

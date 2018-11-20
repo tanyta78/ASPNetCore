@@ -16,13 +16,7 @@
 
         public IActionResult Index()
         {
-            if (this.User.Identity.IsAuthenticated)
-            {
-                var model = this.eventService.GetAllEvents(this.User.Identity.Name);
-                return this.View(model);
-            }
-
-            return this.View();
+           return this.View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
