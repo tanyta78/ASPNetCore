@@ -52,7 +52,11 @@
                     .AddRoleStore<ApplicationRoleStore>()
                     .AddDefaultTokenProviders(); ;
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); 
+
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();

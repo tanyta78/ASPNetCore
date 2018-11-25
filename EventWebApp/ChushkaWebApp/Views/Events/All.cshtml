@@ -5,30 +5,35 @@
 }
 
 <h1 class="text-center">All Events</h1>
-<hr class="chushka-bg-color w-50 hr-2" />
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Place</th>
+<hr class="chushka-bg-color w-75 hr-2" />
+<div class="container d-flex justify-content-center w-75">
+
+    <table class="table table-hover">
+        <thead>
+        <tr class="row">
+            <th class="col-md-1">#</th>
+            <th class="col-md-3">Name</th>
+            <th class="col-md-2">Start</th>
+            <th class="col-md-2">End</th>
+            <th class="col-md-4">Place</th>
         </tr>
-    </thead>
-    <tbody>
-    @for (var index = 0; index < Model.Length; index++)
-    {
-        var evento = Model[index];
-        var realIndex = index + 1;
-        <tr>
-            <th>@realIndex</th>
-            <td>@evento.Name</td>
-            <td>@evento.Start</td>
-            <td>@evento.End</td>
-            <td>@evento.Place</td>
-        </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @for (var index = 0; index < Model.Length; index++)
+        {
+            var evento = Model[index];
+            var realIndex = index + 1;
+            <tr class="row">
+                <th class="col-md-1">@realIndex</th>
+                <td class="col-md-3">@evento.Name</td>
+                <td class="col-md-2">@evento.Start.ToString("dd-MMM-yy hh:mm:ss")</td>
+                <td class="col-md-2">@evento.End.ToString("dd-MMM-yy hh:mm:ss")</td>
+                <td class="col-md-4">@evento.Place</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+</div>
+<hr class="chushka-bg-color w-75 hr-2" />
 

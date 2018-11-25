@@ -21,3 +21,14 @@ footer {
     border: 0;
     width: 98%;
 }
+.w-85 {
+    width: 85%
+}
+
+.bg-gray {
+    background-color: gray;
+}
+
+.text-gray {
+    color: gray;
+}

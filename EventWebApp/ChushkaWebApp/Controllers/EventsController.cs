@@ -1,9 +1,11 @@
 ﻿namespace EventWebApp.Controllers
 {
+    using System.Linq;
     using Data.Models;
     using Filters;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Models;
     using Models.Events;
     using Services.Contracts;
 
@@ -37,6 +39,28 @@
         [HttpPost]
         public IActionResult Create(EventViewModel model)
         {
+            //var.1 - handling binding errors 
+            //if (this.ModelState.IsValid)
+            //{
+            //    return this.eventService.CreateEvent(model);
+            //}
+
+            //return this.View((object) model);
+
+            //var.2 - throw exceptions and handle them with error handlers
+            if (!this.ModelState.IsValid)
+            {
+                var messages = string.Join("; ", this.ModelState.Values
+                                                              .SelectMany(x => x.Errors)
+                                                              .Select(x => x.ErrorMessage));
+                var errorViewModel = new ErrorViewModel()
+                {
+                    Description = messages
+                };
+                return this.View("_Error", errorViewModel);
+            }
+
+
             return this.eventService.CreateEvent(model);
         }
 
