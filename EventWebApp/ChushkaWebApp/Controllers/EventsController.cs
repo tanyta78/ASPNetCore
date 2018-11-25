@@ -67,7 +67,7 @@
         [Authorize]
         public IActionResult Details(string id)
         {
-            var eventById = this.eventService.GetEventById(int.Parse(id));
+            var eventById = this.eventService.GetEventById(id);
             if (eventById == null)
             {
                 return this.BadRequest("Invalid event id");
@@ -79,7 +79,7 @@
         [Authorize("Admin")]
         public IActionResult Delete(string id)
         {
-            Event product = this.eventService.GetEventById(int.Parse(id));
+            Event product = this.eventService.GetEventById(id);
             var viewModel = new EventViewModel
             {
                 //todo: add deleting functionality
@@ -98,7 +98,7 @@
         [Authorize("Admin")]
         public IActionResult Edit(string id)
         {
-            var evento = this.eventService.GetEventById(int.Parse(id));
+            var evento = this.eventService.GetEventById(id);
             var viewModel = new EventViewModel
             {
                 //todo: edit props for changing

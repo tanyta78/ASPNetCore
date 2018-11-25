@@ -32,6 +32,7 @@
             {
                 var sampleEvent = new Event()
                 {
+                    Id = Guid.NewGuid(),
                     Name = $"Sample event number {i}",
                     Place = $"Sample place {i}",
                     Start = DateTime.Now.Add(TimeSpan.FromDays(i)),

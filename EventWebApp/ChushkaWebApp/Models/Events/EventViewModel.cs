@@ -6,7 +6,7 @@
 
     public class EventViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, ErrorMessage = "Name length must be at least 10 characters", MinimumLength = 10)]
@@ -16,12 +16,12 @@
         public string Place { get; set; }
 
         [Required(ErrorMessage = "Start date should not be empty")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yy H:mm:ss}")]
         public DateTime Start { get; set; }
 
         [Required(ErrorMessage = "End date should not be empty")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         public DateTime End { get; set; }
 
         [Required(ErrorMessage = "TotalTickets should not be empty")]

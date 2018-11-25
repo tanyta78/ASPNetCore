@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181119115506_initial")]
-    partial class initial
+    [Migration("20181125214500_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -102,11 +102,29 @@ namespace EventWebApp.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("EventWebApp.Data.Models.Event", b =>
+            modelBuilder.Entity("EventWebApp.Data.Models.CustomLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<int>("EventId");
+
+                    b.Property<string>("LogLevel");
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("EventWebApp.Data.Models.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("End");
 
@@ -123,6 +141,30 @@ namespace EventWebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EventWebApp.Data.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CustomerId");
+
+                    b.Property<string>("CustomerId1");
+
+                    b.Property<Guid>("EventId");
+
+                    b.Property<DateTime>("OrderedOn");
+
+                    b.Property<int>("TicketsCount");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId1");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -209,6 +251,18 @@ namespace EventWebApp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EventWebApp.Data.Models.Order", b =>
+                {
+                    b.HasOne("EventWebApp.Data.Models.ApplicationUser", "Customer")
+                        .WithMany("OrderedEvents")
+                        .HasForeignKey("CustomerId1");
+
+                    b.HasOne("EventWebApp.Data.Models.Event", "Event")
+                        .WithMany("UsersOrders")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

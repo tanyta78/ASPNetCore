@@ -42,7 +42,7 @@
 
         public IActionResult DeleteEvent(string id)
         {
-            var evento = this.db.Events.FirstOrDefault(p => p.Id == int.Parse(id));
+            var evento = this.db.Events.FirstOrDefault(p => p.Id.ToString() == id);
             if (evento == null) return this.Redirect("/");
             //this.db.Products.Remove(product).State = EntityState.Deleted;
 
@@ -87,10 +87,10 @@
            return events;
         }
 
-        public Event GetEventById(int id)
+        public Event GetEventById(string id)
         {
             var product = this.db.Events
-                              .FirstOrDefault(x => x.Id == id);
+                              .FirstOrDefault(x => x.Id.ToString() == id);
 
             return product;
         }

@@ -121,9 +121,8 @@ namespace EventWebApp.Migrations
 
             modelBuilder.Entity("EventWebApp.Data.Models.Event", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("End");
 
@@ -140,6 +139,30 @@ namespace EventWebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EventWebApp.Data.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CustomerId");
+
+                    b.Property<string>("CustomerId1");
+
+                    b.Property<Guid>("EventId");
+
+                    b.Property<DateTime>("OrderedOn");
+
+                    b.Property<int>("TicketsCount");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId1");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -226,6 +249,18 @@ namespace EventWebApp.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EventWebApp.Data.Models.Order", b =>
+                {
+                    b.HasOne("EventWebApp.Data.Models.ApplicationUser", "Customer")
+                        .WithMany("OrderedEvents")
+                        .HasForeignKey("CustomerId1");
+
+                    b.HasOne("EventWebApp.Data.Models.Event", "Event")
+                        .WithMany("UsersOrders")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

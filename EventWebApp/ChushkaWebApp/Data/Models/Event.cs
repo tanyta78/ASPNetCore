@@ -1,10 +1,11 @@
 ﻿namespace EventWebApp.Data.Models
 {
     using System;
+    using System.Collections.Generic;
 
     public class Event
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -17,6 +18,8 @@
         public int TotalTickets { get; set; }
 
         public decimal PricePerTicket { get; set; }
+
+        public ICollection<Order> UsersOrders { get; set; } = new List<Order>();
 
     }
 }
