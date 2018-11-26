@@ -7,18 +7,18 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Logging;
     using Models.Events;
+    using Models.Orders;
 
     public class EventService : PageModel, IEventService
     {
         private readonly ApplicationDbContext db;
-     
+
 
         public EventService(ApplicationDbContext db)
         {
             this.db = db;
-          
+
         }
 
         public IActionResult CreateEvent(EventViewModel model)
@@ -35,7 +35,7 @@
 
             this.db.Events.Add(evento);
             this.db.SaveChanges();
-           // this.logger.LogInformation("Event created:" + evento.Name,evento);
+            // this.logger.LogInformation("Event created:" + evento.Name,evento);
 
             return this.Redirect($"/events/details?id={evento.Id}");
         }
@@ -73,6 +73,7 @@
 
         public EventViewModel[] GetAllEvents(string username)
         {
+
             var events = this.db.Events
                              .Select(x =>
                                  new EventViewModel
@@ -80,11 +81,38 @@
                                      Name = x.Name,
                                      Place = x.Place,
                                      Start = x.Start,
-                                     End = x.End
+                                     End = x.End,
+                                     Order = new OrderViewModel()
+                                     {
+                                         EventId = x.Id
+                                     }
                                  })
                              .ToArray();
 
-           return events;
+            return events;
+        }
+
+        public EventViewModel[] GetMyEvents(string username)
+        {
+            var user = this.db.Users.FirstOrDefault(x => x.UserName == username);
+
+            var usersEvents = this.db.Orders
+                                  .Include(o=>o.Event)
+                                  .Where(o => o.CustomerId.ToString() == user.Id).ToList().GroupBy(o=>o.EventId).ToArray();
+            var events = usersEvents
+                          
+                             .Select(x =>
+                                 new EventViewModel
+                                 {
+                                     Name = x.First().Event.Name,
+                                     Place = x.First().Event.Place,
+                                     Start = x.First().Event.Start,
+                                     End = x.First().Event.End,
+                                     TicketsCount = x.Sum(y=>y.TicketsCount)
+                                 })
+                             .ToArray();
+
+            return events;
         }
 
         public Event GetEventById(string id)

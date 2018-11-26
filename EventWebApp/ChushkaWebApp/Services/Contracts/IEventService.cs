@@ -8,6 +8,8 @@
     {
         EventViewModel[] GetAllEvents(string username);
 
+        EventViewModel[] GetMyEvents(string username);
+
         Event GetEventById(string id);
 
         IActionResult CreateEvent(EventViewModel model);

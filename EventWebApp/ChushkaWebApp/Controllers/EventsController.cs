@@ -28,6 +28,13 @@
             return this.View(model);
         }
 
+        [Authorize]
+        public IActionResult My()
+        {
+            var model = this.eventService.GetMyEvents(this.User.Identity.Name);
+            return this.View(model);
+        }
+
         [Authorize("Admin")]
         public IActionResult Create()
         {

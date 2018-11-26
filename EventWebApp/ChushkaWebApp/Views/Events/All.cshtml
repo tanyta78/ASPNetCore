@@ -10,30 +10,42 @@
 
     <table class="table table-hover">
         <thead>
-        <tr class="row">
-            <th class="col-md-1">#</th>
-            <th class="col-md-3">Name</th>
-            <th class="col-md-2">Start</th>
-            <th class="col-md-2">End</th>
-            <th class="col-md-4">Place</th>
-        </tr>
+            <tr class="row">
+                <th class="col-md-1">#</th>
+                <th class="col-md-2">Name</th>
+                <th class="col-md-2">Start</th>
+                <th class="col-md-2">End</th>
+                <th class="col-md-5">Actions</th>
+            </tr>
         </thead>
         <tbody>
-        @for (var index = 0; index < Model.Length; index++)
-        {
-            var evento = Model[index];
-            var realIndex = index + 1;
-            <tr class="row">
-                <th class="col-md-1">@realIndex</th>
-                <td class="col-md-3">@evento.Name</td>
-                <td class="col-md-2">@evento.Start.ToString("dd-MMM-yy hh:mm:ss")</td>
-                <td class="col-md-2">@evento.End.ToString("dd-MMM-yy hh:mm:ss")</td>
-                <td class="col-md-4">@evento.Place</td>
-            </tr>
-        }
+            @for (var index = 0; index < Model.Length; index++)
+            {
+                var evento = Model[index];
+                var realIndex = index + 1;
+                <tr class="row">
+                    <th class="col-md-1">@realIndex</th>
+                    <td class="col-md-2">@evento.Name</td>
+                    <td class="col-md-2">@evento.Start.ToString("dd-MMM-yy hh:mm:ss")</td>
+                    <td class="col-md-2">@evento.End.ToString("dd-MMM-yy hh:mm:ss")</td>
+                    <td class="col-md-5">
+                        <div class="row">
+                            <form class="mx-auto justify-content-center d-flex" asp-controller="Orders" asp-action="Create">
+                                <input type="text" name="@(nameof(evento.Order.EventId))" value="@evento.Order.EventId" hidden />
+                                <label id="tickets" for="@(nameof(evento.Order.TicketsCount))"> Tickets </label>
+                                <input type="number" id="tickets" name="@(nameof(evento.Order.TicketsCount))" />
+
+                                <button type="submit" class="btn chushka-bg-color">Order</button>
+                                <br />
+                                <span asp-validation-for="@evento.Order.TicketsCount"></span>
+                            </form>
+                        </div>
+                       
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
-
 </div>
 <hr class="chushka-bg-color w-75 hr-2" />
 

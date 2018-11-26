@@ -37,7 +37,11 @@
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseLazyLoadingProxies();
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
+            });
+               
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                  {
@@ -80,6 +84,7 @@
 
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddLogging();
         }
 

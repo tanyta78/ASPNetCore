@@ -1,8 +1,11 @@
 ﻿namespace EventWebApp.Models.Events
 {
     using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Data.Models;
+    using Orders;
 
     public class EventViewModel
     {
@@ -31,6 +34,13 @@
         [Range(typeof(decimal), "0", "79228162514264337593543950335")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal PricePerTicket { get; set; }
+
+        public OrderViewModel Order { get; set; }
+
+        [DisplayName("Tickets")]
+        [Required(ErrorMessage = "Tickets count should not be empty")]
+        [Range(0, int.MaxValue, ErrorMessage = "Tickets count must be a positive number")]
+        public int TicketsCount { get; set; }
 
     }
 }

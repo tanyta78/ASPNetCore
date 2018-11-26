@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181125214500_Initial")]
-    partial class Initial
+    [Migration("20181126151516_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,9 +148,7 @@ namespace EventWebApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("CustomerId");
-
-                    b.Property<string>("CustomerId1");
+                    b.Property<string>("CustomerId");
 
                     b.Property<Guid>("EventId");
 
@@ -160,7 +158,7 @@ namespace EventWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("EventId");
 
@@ -257,7 +255,7 @@ namespace EventWebApp.Migrations
                 {
                     b.HasOne("EventWebApp.Data.Models.ApplicationUser", "Customer")
                         .WithMany("OrderedEvents")
-                        .HasForeignKey("CustomerId1");
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("EventWebApp.Data.Models.Event", "Event")
                         .WithMany("UsersOrders")

@@ -19,7 +19,7 @@
 
         public decimal PricePerTicket { get; set; }
 
-        public ICollection<Order> UsersOrders { get; set; } = new List<Order>();
+        public virtual ICollection<Order> UsersOrders { get; set; } = new List<Order>();
 
     }
 }
