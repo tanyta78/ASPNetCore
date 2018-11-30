@@ -24,5 +24,6 @@
         [Range(0, int.MaxValue, ErrorMessage = "Tickets count must be a positive number")]
         public int TicketsCount { get; set; }
 
+        public int AvailableTickets => this.Event == null ? 0 : this.Event.TotalTickets;
     }
 }

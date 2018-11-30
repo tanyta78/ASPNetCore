@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Models.Events;
+    using Models.Orders;
     using Services.Contracts;
 
 
@@ -24,7 +25,9 @@
         [Authorize]
         public IActionResult All()
         {
+           
             var model = this.eventService.GetAllEvents();
+          
             return this.View(model);
         }
 

@@ -36,19 +36,24 @@
         public IActionResult Create(OrderViewModel model)
         {
 
-            if (!this.ModelState.IsValid)
-            {
-                return this.RedirectToAction("All", "Events", model);
-            }
 
             var availableTickets = this.eventService.GetEventById(model.EventId.ToString()).TotalTickets;
 
             if (availableTickets < model.TicketsCount)
             {
-                this.ModelState.AddModelError("tickets","There are not enough tickets!");
-                this.ViewBag.Error = "There are not enough tickets!";
-                return this.RedirectToAction("All", "Events", model);
+                this.ModelState.AddModelError("AvailableTickets",$"There are not enough tickets! Available tickets are {availableTickets}");
+                //this.TempData.Add("Error", $"There are not enough tickets! Available tickets are {availableTickets}");
+
+                //return this.RedirectToAction("All", "Events", model);
             }
+
+            if (!this.ModelState.IsValid)
+            {
+                var errors = this.ModelState.Values.SelectMany(e => e.Errors).Select(e => e.ErrorMessage).ToList();
+
+                return this.View("_Error", errors);
+            }
+
 
             var user = this.accService.GetUser(this.User.Identity.Name);
             model.CustomerId = user.Id;
