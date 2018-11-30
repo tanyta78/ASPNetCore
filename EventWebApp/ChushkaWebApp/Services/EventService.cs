@@ -1,6 +1,8 @@
 ﻿namespace EventWebApp.Services
 {
+    using System;
     using System.Linq;
+    using AutoMapper;
     using Contracts;
     using Data;
     using Data.Models;
@@ -8,17 +10,16 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.EntityFrameworkCore;
     using Models.Events;
-    using Models.Orders;
 
     public class EventService : PageModel, IEventService
     {
         private readonly ApplicationDbContext db;
+        private readonly IMapper mapper;
 
-
-        public EventService(ApplicationDbContext db)
+        public EventService(ApplicationDbContext db, IMapper mapper)
         {
             this.db = db;
-
+            this.mapper = mapper;
         }
 
         public IActionResult CreateEvent(EventViewModel model)
@@ -36,7 +37,7 @@
             this.db.Events.Add(evento);
             this.db.SaveChanges();
             // this.logger.LogInformation("Event created:" + evento.Name,evento);
-
+            return this.RedirectToAction("Details", "Events", evento.Id);
             return this.Redirect($"/events/details?id={evento.Id}");
         }
 
@@ -71,48 +72,57 @@
             return this.Redirect("/");
         }
 
-        public EventViewModel[] GetAllEvents(string username)
+        public EventViewModel[] GetAllEvents()
         {
 
-            var events = this.db.Events
-                             .Select(x =>
-                                 new EventViewModel
-                                 {
-                                     Name = x.Name,
-                                     Place = x.Place,
-                                     Start = x.Start,
-                                     End = x.End,
-                                     Order = new OrderViewModel()
-                                     {
-                                         EventId = x.Id
-                                     }
-                                 })
-                             .ToArray();
+            //var eventsViewModel = this.db.Events
+            //                 .Select(x =>
+            //                     new EventViewModel
+            //                     {
+            //                         Name = x.Name,
+            //                         Place = x.Place,
+            //                         Start = x.Start,
+            //                         End = x.End,
+            //                         Order = new OrderViewModel()
+            //                         {
+            //                             EventId = x.Id
+            //                         }
+            //                     })
+            //                 .ToArray();
 
-            return events;
+            var events = this.db.Events.ToArray();
+
+            var eventsViewModel = this.mapper.Map<Event[], EventViewModel[]>(events);
+
+            return eventsViewModel;
         }
 
         public EventViewModel[] GetMyEvents(string username)
         {
             var user = this.db.Users.FirstOrDefault(x => x.UserName == username);
 
-            var usersEvents = this.db.Orders
-                                  .Include(o=>o.Event)
-                                  .Where(o => o.CustomerId.ToString() == user.Id).ToList().GroupBy(o=>o.EventId).ToArray();
-            var events = usersEvents
-                          
-                             .Select(x =>
-                                 new EventViewModel
-                                 {
-                                     Name = x.First().Event.Name,
-                                     Place = x.First().Event.Place,
-                                     Start = x.First().Event.Start,
-                                     End = x.First().Event.End,
-                                     TicketsCount = x.Sum(y=>y.TicketsCount)
-                                 })
-                             .ToArray();
+            //var usersEvents = this.db.Orders
+            //                      .Include(o=>o.Event)
+            //                      .Where(o => o.CustomerId.ToString() == user.Id).ToList().GroupBy(o=>o.EventId).ToArray();
+            //var events = usersEvents
 
-            return events;
+            //                 .Select(x =>
+            //                     new EventViewModel
+            //                     {
+            //                         Name = x.First().Event.Name,
+            //                         Place = x.First().Event.Place,
+            //                         Start = x.First().Event.Start,
+            //                         End = x.First().Event.End,
+            //                         TicketsCount = x.Sum(y=>y.TicketsCount)
+            //                     })
+            //                 .ToArray();
+            IGrouping<Guid, Order>[] usersEvents = this.db.Orders
+                               .Include(o => o.Event)
+                              .Where(o => o.CustomerId.ToString() == user.Id).ToList().GroupBy(o => o.EventId).ToArray();
+
+            var eventsViewModel = this.mapper.Map<IGrouping<Guid, Order>[], EventViewModel[]>(usersEvents);
+
+            return eventsViewModel;
         }
 
         public Event GetEventById(string id)

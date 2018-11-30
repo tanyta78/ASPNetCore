@@ -5,6 +5,10 @@
 }
 
 <h1 class="text-center">All Events</h1>
+@if (ViewBag.Error != null)
+{
+    <h3 style="color:red">@ViewBag.Error</h3>
+}
 <hr class="chushka-bg-color w-75 hr-2" />
 <div class="container d-flex justify-content-center w-75">
 
@@ -34,13 +38,14 @@
                                 <input type="text" name="@(nameof(evento.Order.EventId))" value="@evento.Order.EventId" hidden />
                                 <label id="tickets" for="@(nameof(evento.Order.TicketsCount))"> Tickets </label>
                                 <input type="number" id="tickets" name="@(nameof(evento.Order.TicketsCount))" />
-
-                                <button type="submit" class="btn chushka-bg-color">Order</button>
+                              <button type="submit" class="btn chushka-bg-color">Order</button>
                                 <br />
                                 <span asp-validation-for="@evento.Order.TicketsCount"></span>
+
+
                             </form>
                         </div>
-                       
+
                     </td>
                 </tr>
             }

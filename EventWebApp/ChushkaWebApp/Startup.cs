@@ -1,9 +1,11 @@
 ﻿namespace EventWebApp
 {
     using System;
+    using AutoMapper;
     using Data;
     using Data.Models;
     using Logging;
+    using Mapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -41,7 +43,15 @@
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
-               
+
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IOrderService, OrderService>();
+
+            // Config mapper
+            var mapperConfig = new MapperConfiguration(m => m.AddProfile(new MapperProfile()));
+            var mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                  {
@@ -58,7 +68,7 @@
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); 
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -82,9 +92,13 @@
                     });
             });
 
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IOrderService, OrderService>();
+            // Facebook authentication
+            //services.AddAuthentication()
+            //        .AddFacebook(facebookOptions =>
+            //        {
+            //            facebookOptions.AppId = this.Configuration["Authentication:Facebook:AppId"];
+            //            facebookOptions.AppSecret = this.Configuration["Authentication:Facebook:AppSecret"];
+            //        });
             services.AddLogging();
         }
 
@@ -105,7 +119,7 @@
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 

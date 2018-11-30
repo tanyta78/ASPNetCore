@@ -23,5 +23,6 @@
         [Required(ErrorMessage = "Tickets count should not be empty")]
         [Range(0, int.MaxValue, ErrorMessage = "Tickets count must be a positive number")]
         public int TicketsCount { get; set; }
+
     }
 }

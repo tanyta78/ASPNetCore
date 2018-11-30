@@ -24,7 +24,7 @@
         [Authorize]
         public IActionResult All()
         {
-            var model = this.eventService.GetAllEvents(this.User.Identity.Name);
+            var model = this.eventService.GetAllEvents();
             return this.View(model);
         }
 
