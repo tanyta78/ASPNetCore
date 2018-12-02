@@ -38,7 +38,7 @@
             this.db.SaveChanges();
             // this.logger.LogInformation("Event created:" + evento.Name,evento);
             return this.RedirectToAction("Details", "Events", evento.Id);
-            return this.Redirect($"/events/details?id={evento.Id}");
+           // return this.Redirect($"/events/details?id={evento.Id}");
         }
 
         public IActionResult DeleteEvent(string id)

@@ -93,12 +93,12 @@
             });
 
             // Facebook authentication
-            //services.AddAuthentication()
-            //        .AddFacebook(facebookOptions =>
-            //        {
-            //            facebookOptions.AppId = this.Configuration["Authentication:Facebook:AppId"];
-            //            facebookOptions.AppSecret = this.Configuration["Authentication:Facebook:AppSecret"];
-            //        });
+            services.AddAuthentication()
+                    .AddFacebook(facebookOptions =>
+                    {
+                        facebookOptions.AppId = this.Configuration["Authentication:Facebook:AppId"];
+                        facebookOptions.AppSecret = this.Configuration["Authentication:Facebook:AppSecret"];
+                    });
             services.AddLogging();
         }
 

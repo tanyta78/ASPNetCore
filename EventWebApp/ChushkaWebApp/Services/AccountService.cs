@@ -1,10 +1,12 @@
 ﻿namespace EventWebApp.Services
 {
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Contracts;
     using Data;
     using Data.Models;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -31,6 +33,26 @@
         {
             var user = this.db.Users.FirstOrDefault(x => x.UserName == username);
             return user;
+        }
+
+        public void CreateUserExternal()
+        {
+            var info = this.signInManager.GetExternalLoginInfoAsync().GetAwaiter().GetResult();
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = this.userManager.FindByEmailAsync(email).Result;
+            if (user == null)
+            {
+                user = new ApplicationUser() { UserName = email, Email = email };
+                var result = this.userManager.CreateAsync(user).Result;
+            }
+
+            this.signInManager.SignInAsync(user, false).GetAwaiter().GetResult();
+
+        }
+
+        public AuthenticationProperties ConfigureExternalLoginProperties(string provider, string redirectUrl)
+        {
+            return this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
         }
 
         public IActionResult Login(LoginViewModel model)

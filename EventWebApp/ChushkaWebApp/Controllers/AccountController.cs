@@ -1,5 +1,7 @@
 ﻿namespace EventWebApp.Controllers
 {
+    using System.Security.Claims;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Models;
@@ -33,6 +35,23 @@
             }
 
             return result;
+        }
+
+        //POST:Account/ExternalLogin
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = "/Account/ExternalLogin";
+            AuthenticationProperties properties = this.accountService.ConfigureExternalLoginProperties(provider,redirectUrl);
+           
+            return  new ChallengeResult(provider, properties);
+        }
+
+
+        public IActionResult ExternalLogin()
+        {
+            this.accountService.CreateUserExternal();
+            return this.RedirectToAction("Index", "Home");
         }
 
         // GET: Account/Register
