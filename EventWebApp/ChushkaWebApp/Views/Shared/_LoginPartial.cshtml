@@ -63,6 +63,12 @@
             <li class="nav-item">
                 <a class="nav-link text-dark font-weight-bold" asp-controller="Home" asp-action="Index">Hello @User.Identity.Name!</a>
             </li>
+            @if (this.User.IsInRole("Admin"))
+            {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Account" asp-action="AdminPanel">Admin Panel</a>
+            </li>
+            }
             <li class="nav-item">
                 <a class="nav-link text-dark font-weight-bold" asp-controller="Account" asp-action="Logout">Logout</a>
             </li>

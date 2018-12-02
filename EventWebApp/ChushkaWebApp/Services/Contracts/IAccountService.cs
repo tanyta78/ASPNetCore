@@ -1,5 +1,6 @@
 ﻿namespace EventWebApp.Services.Contracts
 {
+    using System.Collections.Generic;
     using Data.Models;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Mvc;
@@ -18,5 +19,11 @@
         void CreateUserExternal();
 
         AuthenticationProperties ConfigureExternalLoginProperties(string provider, string redirectUrl);
+
+        void Demote(string id);
+
+        void Promote(string id);
+
+        IList<AdminPanelUsersViewModel> AdminPanelUsers();
     }
 }

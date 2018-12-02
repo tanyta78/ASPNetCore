@@ -1,38 +1,22 @@
 ﻿namespace EventWebApp.Attributes
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-    using Models.Orders;
 
-    public class AvailableTicketsAttribute : Attribute, IModelValidator
+    public class AvailableTicketsAttribute : ValidationAttribute
     {
-        private int availableNumber;
-        
-        public string ErrorMessage { get; set; }
+        private readonly string tickets;
 
-        public AvailableTicketsAttribute(int number)
+        public AvailableTicketsAttribute(string tickets)
         {
-            this.availableNumber = number;
+            this.tickets = tickets;
         }
 
-        public IEnumerable<ModelValidationResult> Validate(ModelValidationContext context)
+        protected override ValidationResult IsValid(object totalTickets, ValidationContext validationContext)
         {
-            var order = (OrderViewModel)context.Model;
+            var propertyInfo = validationContext.ObjectType.GetProperty(this.tickets);
+            var propertyValue = propertyInfo.GetValue(validationContext.ObjectInstance, null);
+            return (int)totalTickets >= (int)propertyValue ? ValidationResult.Success : new ValidationResult("Tickets count bought must be same or less then tickets left");
 
-            if (order.TicketsCount < this.availableNumber)
-            {
-                return Enumerable.Empty<ModelValidationResult>();
-            }
-
-            return new List<ModelValidationResult>
-            {
-                new ModelValidationResult(context.ModelMetadata.PropertyName, this.ErrorMessage)
-            };
         }
-
-        
     }
 }

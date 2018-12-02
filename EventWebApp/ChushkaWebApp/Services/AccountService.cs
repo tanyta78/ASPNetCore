@@ -1,5 +1,6 @@
 ﻿namespace EventWebApp.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -18,13 +19,15 @@
         private readonly ApplicationDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly ILogger<RegisterViewModel> logger;
 
-        public AccountService(ApplicationDbContext db, UserManager<ApplicationUser> userManager, ILogger<RegisterViewModel> logger, SignInManager<ApplicationUser> signInManager)
+        public AccountService(ApplicationDbContext db, UserManager<ApplicationUser> userManager, ILogger<RegisterViewModel> logger, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             this.db = db;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
             this.logger = logger;
         }
 
@@ -53,6 +56,40 @@
         public AuthenticationProperties ConfigureExternalLoginProperties(string provider, string redirectUrl)
         {
             return this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        }
+
+        public void Demote(string id)
+        {
+            var user = this.userManager.Users.Where(u => u.Id == id).FirstOrDefault();
+            this.userManager.RemoveFromRoleAsync(user, "Admin").GetAwaiter().GetResult();
+        }
+
+        public void Promote(string id)
+        {
+            var user = this.userManager.Users.Where(u => u.Id == id).FirstOrDefault();
+            this.userManager.AddToRoleAsync(user, "Admin").GetAwaiter().GetResult();
+        }
+
+        public IList<AdminPanelUsersViewModel> AdminPanelUsers()
+        {
+            var users = new List<AdminPanelUsersViewModel>();
+            foreach (var u in this.userManager.Users.ToList())
+            {
+                var user = new AdminPanelUsersViewModel
+                {
+                    Username = u.UserName,
+                    Id = u.Id
+                };
+                var roleIds = this.db.UserRoles.Where(r => r.UserId == u.Id).ToList();
+
+                foreach (var roleId in roleIds)
+                {
+                    user.Role.Add(this.roleManager.Roles.Where(r => r.Id == roleId.RoleId).FirstOrDefault().Name);
+                }
+               
+                users.Add(user);
+            }
+            return users;
         }
 
         public IActionResult Login(LoginViewModel model)

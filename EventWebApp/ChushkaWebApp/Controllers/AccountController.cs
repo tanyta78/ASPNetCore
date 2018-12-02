@@ -1,7 +1,9 @@
 ﻿namespace EventWebApp.Controllers
 {
     using System.Security.Claims;
+    using Common;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Models;
@@ -78,6 +80,25 @@
             return this.accountService.Logout();
         }
 
-
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminPanel()
+        {
+            var users = new AdminPanelUsersListViewModel{Users = this.accountService.AdminPanelUsers()};
+            return this.View(users);
+        }
+       
+        [Authorize(Roles = "Admin")]
+        public IActionResult Demote(string id)
+        {
+            this.accountService.Demote(id);
+            return this.RedirectToAction("AdminPanel");
+        }
+     
+        [Authorize(Roles = "Admin")]
+        public IActionResult Promote(string id)
+        {
+            this.accountService.Promote(id);
+            return this.RedirectToAction("AdminPanel");
+        }
     }
 }
