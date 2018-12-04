@@ -26,7 +26,8 @@
                 .ForMember(evm => evm.Start,
                     e => e.MapFrom(s => s.Start.ToString("dd-MMM-yy HH:mm:ss", CultureInfo.InvariantCulture)))
                 .ForMember(evm => evm.End,
-                    e => e.MapFrom(s => s.End.ToString("dd-MMM-yy HH:mm:ss", CultureInfo.InvariantCulture)));
+                    e => e.MapFrom(s => s.End.ToString("dd-MMM-yy HH:mm:ss", CultureInfo.InvariantCulture)))
+                .ReverseMap();
 
 
             this.CreateMap<IGrouping<Guid,Order>, EventViewModel>()

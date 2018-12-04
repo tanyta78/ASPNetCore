@@ -24,15 +24,16 @@
 
         public IActionResult CreateEvent(EventViewModel model)
         {
-            var evento = new Event
-            {
-                Name = model.Name,
-                Place = model.Place,
-                Start = model.Start,
-                End = model.End,
-                PricePerTicket = model.PricePerTicket,
-                TotalTickets = model.TotalTickets
-            };
+            //var evento = new Event
+            //{
+            //    Name = model.Name,
+            //    Place = model.Place,
+            //    Start = model.Start,
+            //    End = model.End,
+            //    PricePerTicket = model.PricePerTicket,
+            //    TotalTickets = model.TotalTickets
+            //};
+            var evento = this.mapper.Map<Event>(model);
 
             this.db.Events.Add(evento);
             this.db.SaveChanges();

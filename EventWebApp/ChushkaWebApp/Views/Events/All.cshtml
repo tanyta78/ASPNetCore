@@ -1,4 +1,8 @@
-﻿@model EventWebApp.Models.Events.EventViewModel[]
+﻿@model IPagedList<EventWebApp.Models.Events.EventViewModel>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
 
 @{
     ViewData["Title"] = "All Events";
@@ -6,10 +10,19 @@
 }
 
 <h1 class="text-center">All Events</h1>
-@if (ViewData["Error"]!=null)
+@if (ViewData["Error"] != null)
 {
     <h3 style="color:red">@ViewData["Error"]</h3>
 }
+<hr class="chushka-bg-color w-75 hr-2" />
+<div class="container d-flex justify-content-center w-75">
+    <!-- output a paging control that lets the user navigation to the previous page, next page, etc -->
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("All", new { page }), new PagedListRenderOptions
+{
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }})
+</div>
+
 <hr class="chushka-bg-color w-75 hr-2" />
 <div class="container d-flex justify-content-center w-75">
 
@@ -24,10 +37,10 @@
             </tr>
         </thead>
         <tbody>
-            @for (var index = 0; index < Model.Length; index++)
+            @for (var index = 0; index < Model.Count; index++)
             {
                 var evento = Model[index];
-                var realIndex = index + 1;
+                var realIndex = index + 1 + (Model.PageNumber - 1) * Model.PageSize;
                 <tr class="row">
                     <th class="col-md-1">@realIndex</th>
                     <td class="col-md-2">@evento.Name</td>
@@ -41,7 +54,7 @@
                                 <input type="number" id="TicketsCount" name="@(nameof(evento.Order.TicketsCount))" />
                                 <button type="submit" class="btn chushka-bg-color">Order</button>
                                 <br />
-                             </form>
+                            </form>
                         </div>
 
                     </td>
@@ -49,6 +62,7 @@
             }
         </tbody>
     </table>
+
 </div>
 <hr class="chushka-bg-color w-75 hr-2" />
 
